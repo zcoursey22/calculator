@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Calculator</title>
+  <link href="main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+
+  <div id="frame">
+    <div id="cells"></div>
+    <span id="name">ZC-22 Plus</span>
+    <div id="screenContainer"><!--<span id="screenUpdates"></span>--><span id="screenMain">0</span></div>
+    <div id="grid">
+      <button class="grid-item, invisible"></button>
+      <button class="grid-item, invisible"></button>
+      <button id="backspace" class="grid-item">&larr;</button>
+      <button id="clear" class="grid-item">C</button>
+      <button id="seven" class="grid-item, operand">7</button>
+      <button id="eight" class="grid-item, operand">8</button>
+      <button id="nine" class="grid-item, operand">9</button>
+      <button id="divide" class="grid-item, operator">/</button>
+      <button id="four" class="grid-item, operand">4</button>
+      <button id="five" class="grid-item, operand">5</button>
+      <button id="six" class="grid-item, operand">6</button>
+      <button id="multiply" class="grid-item, operator">*</button>
+      <button id="one" class="grid-item, operand">1</button>
+      <button id="two" class="grid-item, operand">2</button>
+      <button id="three" class="grid-item, operand">3</button>
+      <button id="subtract"class="grid-item, operator">-</button>
+      <button id="zero" class="grid-item, operand">0</button>
+      <button id="decimal" class="grid-item">.</button>
+      <button id="equal" class="grid-item">=</button>
+      <button id="add" class="grid-item, operator">+</button>
+    </div>
+  </div>
+
+
+  <script>
+
+    function add(x, y) {
+      return Math.round((parseInt(x) + parseInt(y)) * 100) / 100;
+    }
+
+    function subtract(x, y) {
+      return Math.round((x - y) * 100) / 100;
+    }
+
+    function multiply(x, y) {
+      return Math.round(x * y * 100) / 100;
+    }
+
+    function divide(x, y) {
+      return Math.round(x / y * 100) / 100;
+    }
+
+    function operate(x, operator, y) {
+      if (operator === '+') return add(x, y);
+      else if (operator === '-') return subtract(x, y);
+      else if (operator === '*') return multiply(x, y);
+      else return divide(x, y);
+    }
+
+    function checkForDecimal(arrayElement) {
+      for (var i = 0; i < arrayElement; i++) {
+        if (arrayElement[i].toString() === '.') {
+          return true;
+        } else return false;
+      }
+    }
+
+    let equation = [];
+    let memory = undefined;
+    let hasDecimal = false;
+    let newEquationStarting = true;
+    const buttons = document.querySelectorAll("button");
+
+    const screenMain = document.getElementById("screenMain");
+    const screenUpdates = document.getElementById("screenUpdates");
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+
+        /*if (e.target.classList[1] === 'operand' && equation.length === 0) {
+          if (newEquationStarting === true) {
+            newEquationStarting = false;
+            screenMain.textContent = '';
+            screenMain.textContent += e.target.textContent;
+          } else {
+            screenMain.textContent += e.target.textContent;
+          }
+        }
+        else if (e.target.classList[1] === 'operator' && equation.length === 0) {
+          equation.push(parseInt(screenMain.textContent));
+          equation.push(e.target.textContent);
+        }
+        else if (e.target.classList[1] === 'operand' && equation.length === 1) {
+          if (newEquationStarting === true) {
+            newEquationStarting = false;
+            screenMain.textContent = '';
+            screenMain.textContent += e.target.textContent;
+          } else {
+            screenMain.textContent += e.target.textContent;
+          }
+        }
+        else if (e.target.classList[1] === 'operator' && equation.length === 1) {
+          equation.push(e.target.textContent);
+        }
+        else if (e.target.classList[1] === 'operand' && equation.length === 2) {
+          screenMain.textContent = '';
+          screenMain.textContent += e.target.textContent;
+        }
+        else if (e.target.classList[1] === 'operator' && equation.length === 2) {
+          equation.push(parseInt(screenMain.textContent));
+          memory = operate(equation[0], equation[1], equation[2]);
+          equation = [memory];
+          screenMain.textContent = memory.toString();
+          newEquationStarting = true;
+        }
+        else if (e.target.id === 'equal') {
+          if (equation.length === 2) {
+            equation.push(parseInt(screenMain.textContent));
+            memory = operate(equation[0], equation[1], equation[2]);
+            equation = [memory];
+            screenMain.textContent = memory.toString();
+            newEquationStarting = true;
+          }
+        }
+        else if (e.target.id === 'backspace' && equation[0] !== memory) {
+          screenMain.textContent = screenMain.textContent.substring(0, screenMain.textContent.length - 1);
+          if (!screenMain.textContent) screenMain.textContent = '0';
+        }*/
+
+        if (equation.length === 0 && e.target.classList[1] === 'operand') {
+          equation.push(parseInt(e.target.textContent));
+          screenMain.textContent = e.target.textContent;
+        }
+        else if (equation.length === 1 && e.target.classList[1] === 'operand' && memory === undefined) {
+          equation[0] += e.target.textContent;
+          screenMain.textContent = equation[0];
+        }
+        else if (equation.length === 1 && e.target.classList[1] === 'operator') {
+          equation.push(e.target.textContent);
+          hasDecimal = false;
+        }
+        else if (equation.length === 1 && e.target.classList[1] === 'operand' && equation[0] === memory) {
+          memory = undefined;
+          equation = [e.target.textContent];
+          screenMain.textContent = e.target.textContent;
+        }
+        else if (equation.length === 2 && e.target.classList[1] === 'operand') {
+          equation.push(parseInt(e.target.textContent));
+          screenMain.textContent = e.target.textContent;
+        }
+        else if (equation.length === 3 && e.target.classList[1] === 'operand' && memory === undefined) {
+          equation[2] += e.target.textContent;
+          screenMain.textContent = equation[2];
+        }
+        else if (equation.length === 3 && e.target.classList[1] === 'operator') {
+          screenMain.textContent = "" + operate(equation[0], equation[1], equation[2]);
+          memory = operate(equation[0], equation[1], equation[2]);
+          equation = [memory, e.target.textContent];
+          hasDecimal = false;
+        }
+        else if (equation.length === 3 && e.target.id === 'equal') {
+          screenMain.textContent = "" + operate(equation[0], equation[1], equation[2]);
+          memory = operate(equation[0], equation[1], equation[2]);
+          equation = [memory];
+          hasDecimal = false;
+        }
+        else if (e.target.id === 'clear') {
+          screenMain.textContent = "0";
+          equation = [];
+        }
+      });
+    });
+
+  </script>
+
+
+</body>
+</html>
