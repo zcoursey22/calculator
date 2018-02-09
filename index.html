@@ -170,7 +170,29 @@
         }
         else if (e.target.id === 'clear') {
           screenMain.textContent = "0";
+          memory = undefined;
           equation = [];
+          hasDecimal = false;
+        }
+        else if (e.target.id === 'decimal' && hasDecimal === false && memory === undefined) {
+          if (screenMain.textContent === '0') {
+            equation.push(0);
+          }
+          hasDecimal = true;
+          screenMain.textContent += ".";
+          equation[0] += e.target.textContent;
+        }
+        else if (e.target.id === 'backspace') {
+          if (screenMain.textContent[screenMain.textContent.length - 1] === '.') {
+            hasDecimal = false;
+          }
+          screenMain.textContent = screenMain.textContent.slice(0, -1);
+          equation[equation.length - 1] = parseInt(screenMain.textContent);
+          if (screenMain.textContent === '' || memory !== undefined) {
+            screenMain.textContent = '';
+            screenMain.textContent += '0';
+            equation = [];
+          }
         }
       });
     });
