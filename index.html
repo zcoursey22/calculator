@@ -10,7 +10,7 @@
   <div id="frame">
     <div id="cells"></div>
     <span id="name">ZC-22 Plus</span>
-    <div id="screenContainer"><!--<span id="screenUpdates"></span>--><span id="screenMain">0</span></div>
+    <div id="screenContainer"><!--<span id="screenUpdates">0</span>--><span id="screenMain">0</span></div>
     <div id="grid">
       <button class="grid-item invisible"></button>
       <button class="grid-item invisible"></button>
@@ -80,57 +80,6 @@
 
     buttons.forEach((button) => {
       button.addEventListener('click', (e) => {
-
-        /*if (e.target.classList[1] === 'operand' && equation.length === 0) {
-          if (newEquationStarting === true) {
-            newEquationStarting = false;
-            screenMain.textContent = '';
-            screenMain.textContent += e.target.textContent;
-          } else {
-            screenMain.textContent += e.target.textContent;
-          }
-        }
-        else if (e.target.classList[1] === 'operator' && equation.length === 0) {
-          equation.push(parseInt(screenMain.textContent));
-          equation.push(e.target.textContent);
-        }
-        else if (e.target.classList[1] === 'operand' && equation.length === 1) {
-          if (newEquationStarting === true) {
-            newEquationStarting = false;
-            screenMain.textContent = '';
-            screenMain.textContent += e.target.textContent;
-          } else {
-            screenMain.textContent += e.target.textContent;
-          }
-        }
-        else if (e.target.classList[1] === 'operator' && equation.length === 1) {
-          equation.push(e.target.textContent);
-        }
-        else if (e.target.classList[1] === 'operand' && equation.length === 2) {
-          screenMain.textContent = '';
-          screenMain.textContent += e.target.textContent;
-        }
-        else if (e.target.classList[1] === 'operator' && equation.length === 2) {
-          equation.push(parseInt(screenMain.textContent));
-          memory = operate(equation[0], equation[1], equation[2]);
-          equation = [memory];
-          screenMain.textContent = memory.toString();
-          newEquationStarting = true;
-        }
-        else if (e.target.id === 'equal') {
-          if (equation.length === 2) {
-            equation.push(parseInt(screenMain.textContent));
-            memory = operate(equation[0], equation[1], equation[2]);
-            equation = [memory];
-            screenMain.textContent = memory.toString();
-            newEquationStarting = true;
-          }
-        }
-        else if (e.target.id === 'backspace' && equation[0] !== memory) {
-          screenMain.textContent = screenMain.textContent.substring(0, screenMain.textContent.length - 1);
-          if (!screenMain.textContent) screenMain.textContent = '0';
-        }*/
-
         if (equation.length === 0 && e.target.classList[1] === 'operand') {
           equation.push(parseInt(e.target.textContent));
           screenMain.textContent = e.target.textContent;
@@ -180,9 +129,9 @@
           }
           hasDecimal = true;
           screenMain.textContent += ".";
-          equation[0] += e.target.textContent;
+          equation[equation.length - 1] += e.target.textContent;
         }
-        else if (e.target.id === 'backspace') {
+        else if (e.target.id === 'backspace' && equation.length !== 2) {
           if (screenMain.textContent[screenMain.textContent.length - 1] === '.') {
             hasDecimal = false;
           }
