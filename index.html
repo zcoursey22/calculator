@@ -7,31 +7,33 @@
 <body>
 
 
-  <div id="frame">
-    <div id="cells"></div>
-    <span id="name">ZC-22 Plus</span>
-    <div id="screenContainer"><!--<span id="screenUpdates">0</span>--><span id="screenMain">0</span></div>
-    <div id="grid">
-      <button class="grid-item invisible"></button>
-      <button class="grid-item invisible"></button>
-      <button id="backspace" class="grid-item">&larr;</button>
-      <button id="clear" class="grid-item">C</button>
-      <button id="seven" class="grid-item operand">7</button>
-      <button id="eight" class="grid-item operand">8</button>
-      <button id="nine" class="grid-item operand">9</button>
-      <button id="divide" class="grid-item operator">/</button>
-      <button id="four" class="grid-item operand">4</button>
-      <button id="five" class="grid-item operand">5</button>
-      <button id="six" class="grid-item operand">6</button>
-      <button id="multiply" class="grid-item operator">*</button>
-      <button id="one" class="grid-item operand">1</button>
-      <button id="two" class="grid-item operand">2</button>
-      <button id="three" class="grid-item operand">3</button>
-      <button id="subtract"class="grid-item operator">-</button>
-      <button id="zero" class="grid-item operand">0</button>
-      <button id="decimal" class="grid-item">.</button>
-      <button id="equal" class="grid-item">=</button>
-      <button id="add" class="grid-item operator">+</button>
+  <div id='frameContainer'>
+    <div id="frame">
+      <div id="cells"></div>
+      <span id="name">ZC-22 Plus</span>
+      <div id="screenContainer"><!--<span id="screenUpdates">0</span>--><span id="screenMain">0</span></div>
+      <div id="grid">
+        <button class="grid-item invisible"></button>
+        <button class="grid-item invisible"></button>
+        <button id="backspace" class="grid-item">&larr;</button>
+        <button id="clear" class="grid-item">C</button>
+        <button id="seven" class="grid-item operand">7</button>
+        <button id="eight" class="grid-item operand">8</button>
+        <button id="nine" class="grid-item operand">9</button>
+        <button id="divide" class="grid-item operator">/</button>
+        <button id="four" class="grid-item operand">4</button>
+        <button id="five" class="grid-item operand">5</button>
+        <button id="six" class="grid-item operand">6</button>
+        <button id="multiply" class="grid-item operator">*</button>
+        <button id="one" class="grid-item operand">1</button>
+        <button id="two" class="grid-item operand">2</button>
+        <button id="three" class="grid-item operand">3</button>
+        <button id="subtract"class="grid-item operator">-</button>
+        <button id="zero" class="grid-item operand">0</button>
+        <button id="decimal" class="grid-item">.</button>
+        <button id="equal" class="grid-item">=</button>
+        <button id="add" class="grid-item operator">+</button>
+      </div>
     </div>
   </div>
 
@@ -79,70 +81,98 @@
     const screenUpdates = document.getElementById("screenUpdates");
 
     buttons.forEach((button) => {
+
+      button.addEventListener('mousedown', (e) =>{
+        button.classList.add("pressed");
+      });
+
+      button.addEventListener('mouseup', (e) =>{
+        button.classList.remove("pressed");
+      });
+
+      button.addEventListener('mouseout', (e) =>{
+        button.classList.remove("pressed");
+      });
+
       button.addEventListener('click', (e) => {
-        if (equation.length === 0 && e.target.classList[1] === 'operand') {
-          equation.push(parseInt(e.target.textContent));
-          screenMain.textContent = e.target.textContent;
-        }
-        else if (equation.length === 1 && e.target.classList[1] === 'operand' && memory === undefined) {
-          equation[0] += e.target.textContent;
-          screenMain.textContent = equation[0];
-        }
-        else if (equation.length === 1 && e.target.classList[1] === 'operator') {
-          equation.push(e.target.textContent);
-          hasDecimal = false;
-        }
-        else if (equation.length === 1 && e.target.classList[1] === 'operand' && equation[0] === memory) {
-          memory = undefined;
-          equation = [e.target.textContent];
-          screenMain.textContent = e.target.textContent;
-        }
-        else if (equation.length === 2 && e.target.classList[1] === 'operand') {
-          equation.push(parseInt(e.target.textContent));
-          screenMain.textContent = e.target.textContent;
-        }
-        else if (equation.length === 3 && e.target.classList[1] === 'operand' && memory === undefined) {
-          equation[2] += e.target.textContent;
-          screenMain.textContent = equation[2];
-        }
-        else if (equation.length === 3 && e.target.classList[1] === 'operator') {
-          screenMain.textContent = "" + operate(equation[0], equation[1], equation[2]);
-          memory = operate(equation[0], equation[1], equation[2]);
-          equation = [memory, e.target.textContent];
-          hasDecimal = false;
-        }
-        else if (equation.length === 3 && e.target.id === 'equal') {
-          screenMain.textContent = "" + operate(equation[0], equation[1], equation[2]);
-          memory = operate(equation[0], equation[1], equation[2]);
-          equation = [memory];
-          hasDecimal = false;
-        }
-        else if (e.target.id === 'clear') {
-          screenMain.textContent = "0";
-          memory = undefined;
-          equation = [];
-          hasDecimal = false;
-        }
-        else if (e.target.id === 'decimal' && hasDecimal === false && memory === undefined) {
-          if (screenMain.textContent === '0') {
-            equation.push(0);
-          }
-          hasDecimal = true;
-          screenMain.textContent += ".";
-          equation[equation.length - 1] += e.target.textContent;
-        }
-        else if (e.target.id === 'backspace' && equation.length !== 2) {
-          if (screenMain.textContent[screenMain.textContent.length - 1] === '.') {
+
+        if ((screenMain.textContent.length >= 9 && hasDecimal === false) || (screenMain.textContent.length >= 10 && hasDecimal === true) || screenMain.textContent === 'overflow') {
+          screenMain.textContent = 'overflow';
+          if (e.target.id === 'clear' && screenMain.textContent === 'overflow') {
+            screenMain.textContent = "0";
+            memory = undefined;
+            equation = [];
             hasDecimal = false;
           }
-          screenMain.textContent = screenMain.textContent.slice(0, -1);
-          equation[equation.length - 1] = parseInt(screenMain.textContent);
-          if (screenMain.textContent === '' || memory !== undefined) {
-            screenMain.textContent = '';
-            screenMain.textContent += '0';
+        } else if (screenMain.textContent != 'overflow') {
+          if (equation.length === 0 && e.target.classList[1] === 'operand') {
+            equation.push(parseInt(e.target.textContent));
+            screenMain.textContent = e.target.textContent;
+          }
+          else if (equation.length === 1 && e.target.classList[1] === 'operand' && memory === undefined) {
+            equation[0] += e.target.textContent;
+            screenMain.textContent = equation[0];
+          }
+          else if (equation.length === 1 && e.target.classList[1] === 'operator') {
+            equation.push(e.target.textContent);
+            hasDecimal = false;
+          }
+          else if (equation.length === 1 && e.target.classList[1] === 'operand' && equation[0] === memory) {
+            memory = undefined;
+            equation = [e.target.textContent];
+            screenMain.textContent = e.target.textContent;
+          }
+          else if (equation.length === 2 && e.target.classList[1] === 'operand') {
+            equation.push(parseInt(e.target.textContent));
+            screenMain.textContent = e.target.textContent;
+            memory = undefined;
+          }
+          else if (equation.length === 3 && e.target.classList[1] === 'operand' && memory === undefined) {
+            equation[2] += e.target.textContent;
+            screenMain.textContent = equation[2];
+          }
+          else if (equation.length === 3 && e.target.classList[1] === 'operator') {
+            screenMain.textContent = "" + operate(equation[0], equation[1], equation[2]);
+            memory = operate(equation[0], equation[1], equation[2]);
+            equation = [memory, e.target.textContent];
+            hasDecimal = false;
+          }
+          else if (equation.length === 3 && e.target.id === 'equal') {
+            screenMain.textContent = "" + operate(equation[0], equation[1], equation[2]);
+            memory = operate(equation[0], equation[1], equation[2]);
+            equation = [memory];
+            hasDecimal = false;
+          }
+          else if (e.target.id === 'clear') {
+            screenMain.textContent = "0";
+            memory = undefined;
             equation = [];
+            hasDecimal = false;
+          }
+          else if (e.target.id === 'decimal' && hasDecimal === false && memory === undefined && equation.length !== 2) {
+            if (screenMain.textContent === '0') {
+              equation.push(0);
+            }
+            hasDecimal = true;
+            screenMain.textContent += ".0";
+            equation[equation.length - 1] += e.target.textContent;
+          }
+          else if (e.target.id === 'backspace' && equation.length !== 2) {
+            if (screenMain.textContent[screenMain.textContent.length - 2] === '.') {
+              hasDecimal = false;
+              screenMain.textContent = screenMain.textContent.slice(0, -1);
+            }
+            screenMain.textContent = screenMain.textContent.slice(0, -1);
+            equation[equation.length - 1] = parseInt(screenMain.textContent);
+            if (screenMain.textContent === '' || memory !== undefined) {
+              screenMain.textContent = '';
+              screenMain.textContent += '0';
+              equation = [];
+            }
           }
         }
+
+
       });
     });
 

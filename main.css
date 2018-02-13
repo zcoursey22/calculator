@@ -15,6 +15,18 @@ body {
   background-size: cover;
 }
 
+#frameContainer {
+  border: 1px solid black;
+  width: 27.75vw;
+  height: 40.25vw;
+  position: absolute;
+  border-radius: 5%;
+  top: 50%;
+  left: 50%;
+  margin: -20% 0 0 -15%;
+  background: #665;
+}
+
 #frame {
   /*background: linear-gradient(to bottom right, #456, #345 85%);*/
   background: linear-gradient(to bottom right, #aa9, #887 85%);
@@ -23,11 +35,8 @@ body {
   height: 40vw;
   border-radius: 5%;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -20% 0 0 -15%;
-  /*box-shadow: 0.2vw 0.4vw 0 0.1vw #234;*/
-  box-shadow: 0.2vw 0.4vw 0 0.1vw #665;
+  top: -0.5%;
+  left: -0.5%;
 }
 
 #cells {
@@ -103,6 +112,9 @@ body {
   box-shadow: 0.1vw 0.15vw 0 0.05vw #222;
   outline: none;
 }
+.pressed {
+  box-shadow: 0 0 0 0.025vw #222;
+}
 
 .invisible {
   visibility: hidden;
@@ -112,11 +124,22 @@ body {
   background: linear-gradient(to bottom right, #f80, #e70 85%);
   box-shadow: 0.1vw 0.15vw 0 0.05vw #940;
 }
+#equal.pressed {
+  box-shadow: 0 0 0 0.025vw #940;
+}
+
 #clear {
   background: linear-gradient(to bottom right, maroon, #711 85%);
   box-shadow: 0.1vw 0.15vw 0 0.05vw #311;
 }
+#clear.pressed {
+  box-shadow: 0 0 0 0.025vw #311;
+}
+
 #backspace, #add, #subtract, #multiply, #divide {
   background: linear-gradient(to bottom right, #222, #111 85%);
   box-shadow: 0.1vw 0.15vw 0 0.05vw black;
+}
+#backspace.pressed, #add.pressed, #subtract.pressed, #multiply.pressed, #divide.pressed {
+  box-shadow: 0 0 0 0.025vw black;
 }
