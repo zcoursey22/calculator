@@ -163,7 +163,7 @@
               screenMain.textContent = screenMain.textContent.slice(0, -1);
             }
             screenMain.textContent = screenMain.textContent.slice(0, -1);
-            equation[equation.length - 1] = parseInt(screenMain.textContent);
+            equation[equation.length - 1] = screenMain.textContent;
             if (screenMain.textContent === '' || memory !== undefined) {
               screenMain.textContent = '';
               screenMain.textContent += '0';
